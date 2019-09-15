@@ -3,6 +3,8 @@ title: "p8105_hw1_ps3070"
 output: github_document
 ---
 
+**Problem 1**
+
 First, I will load the tidyverse library.
 ```{r adding tidyverse library}
 library(tidyverse)
@@ -41,3 +43,34 @@ mean(vec_factor)
 ```
 
 The mean of 'random_sample' and 'vec_logical' are possible to compute because they are numeric and logical variables. The logical variable values will be interpreted as True = 1 and False = 0, so the mean will be an average of these results. The means for vectors 'vec_character' and 'vec_factor' cannot be computed because, to calculate the mean, R requires the argument to be numeric or logical.
+
+
+
+The following code chunk will use 'as.numeric' to convert factor, logical, and character variables to numeric.
+
+```{r numeric conversion, results="hide"}
+fac_to_num = as.numeric(vec_factor)
+char_to_num = as.numeric(vec_character)
+log_to_num = as.numeric(vec_logical)
+```
+
+Factor variables will convert to numeric variables based on the integer values that R assigns to them. Every time a factor vector appears, R will assign the same number to it. Since I created the factor vector with letters, the integers are assigned starting with 1 and in alphabetical order. 
+
+The logical variable values will be assigned as True = 1 and False = 0.
+
+R tries to coerce variables of a different type (i.e. not numeric or logical) to NAs. Since the character vector is not based on numbers/integers, we are unable to convert to numeric.
+
+
+
+In the next code chunk, I will:
+
+* convert the logical vector to numeric, and multiply the random sample by the result
+* convert the logical vector to a factor, and multiply the random sample by the result
+* convert the logical vector to a factor and then convert the result to numeric, and multiply the random sample by the result
+
+```{r conversions, results="hide"}
+as.numeric(vec_logical) * random_sample
+as.factor(vec_logical) * random_sample #The console says "not meaningful for factors" and displays a string of NAs because the factor variable I created contained letters.
+as.numeric(as.factor(vec_logical)) * random_sample
+
+```
