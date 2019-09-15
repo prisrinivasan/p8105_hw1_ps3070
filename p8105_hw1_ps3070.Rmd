@@ -3,26 +3,41 @@ title: "p8105_hw1_ps3070"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+First, I will load the tidyverse library.
+```{r adding tidyverse library}
+library(tidyverse)
 ```
 
-## R Markdown
+Next, I will create a dataframe comprised of:
+* a random sample of size 8 from a standard Normal distribution
+* a logical vector indicating whether elements of the sample are greater than 0
+* a character vector of length 8
+* a factor vector of length 8, with 3 different factor “levels”
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r create vectors}
+set.seed(123)
+random_sample = rnorm(8)
+vec_logical = random_sample > 0 #This creates a logical vector the same length as random_sample with the value True when this condition is satisfied and False when it isn't.
+vec_character = c("abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vwx")
+vec_factor = factor(c("p","r","i","p","r","i","p","r"))
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r create dataframe, results="hide"}
+prob1_df = tibble(
+  random_sample,
+  vec_logical,
+  vec_character,
+  vec_factor
+)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The following code chunk attempts to take the mean of each vector.
+```{r take mean}
+mean(random_sample)
+mean(vec_logical)
+mean(vec_character)
+mean(vec_factor)
+```
+
+The mean of 'random_sample' and 'vec_logical' are possible to compute because they are numeric and logical variables. The logical variable values will be interpreted as True = 1 and False = 0, so the mean will be an average of these results. The means for vectors 'vec_character' and 'vec_factor' cannot be computed because, to calculate the mean, R requires the argument to be numeric or logical.
