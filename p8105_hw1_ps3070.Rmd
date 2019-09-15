@@ -74,3 +74,39 @@ as.factor(vec_logical) * random_sample #The console says "not meaningful for fac
 as.numeric(as.factor(vec_logical)) * random_sample
 
 ```
+
+
+**Problem 2**
+
+I created a data frame comprised of:
+
+* x: a random sample of size 500 from a standard Normal distribution
+* y: a random sample of size 500 from a standard Normal distribution
+* A logical vector indicating whether x + y > 1
+* A numeric vector created by coercing the above logical vector
+* A factor vector created by coercing the above logical vector
+
+```{r make vectors}
+set.seed(1234)
+x = rnorm(500)
+y = rnorm(500)
+vec_log = (x + y) > 1
+vec_num = as.numeric(vec_log)
+vec_fac = as.factor(vec_log)
+```
+
+```{r create dataframe}
+prob2_df = tibble(
+  x,
+  y,
+  vec_log,
+  vec_num,
+  vec_fac
+)
+```
+
+
+
+The dataset includes `r nrow(prob2_df)` rows and `r ncol(prob2_df)`, indicating that there are 5 vectors with 500 values. The mean of x is `r mean(x)`. The median of x is `r median(x)`. The standard deviation of x is `r sd(x)`. The proportion of cases for which (x + y) > 1 is the same as the proportion of cases for which the logical vector is 'True', which is `r length(which(vec_log))/length(vec_log)`.
+
+
