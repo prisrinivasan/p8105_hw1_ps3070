@@ -42,11 +42,11 @@ mean(pull(prob1_df, vec_character))
 mean(pull(prob1_df, vec_factor))
 ```
 
-The mean of 'random_sample' and 'vec_logical' are possible to compute because they are numeric and logical variables. The logical variable values will be interpreted as True = 1 and False = 0, so the mean will be an average of these results. The means for vectors 'vec_character' and 'vec_factor' cannot be computed because, to calculate the mean, R requires the argument to be numeric or logical.
+The mean of `random_sample` and `vec_logical` are possible to compute because they are numeric and logical variables. The logical variable values will be interpreted as `True` = 1 and `False` = 0, so the mean will be an average of these results. The means for vectors `vec_character` and `vec_factor` cannot be computed because, to calculate the mean, R requires the argument to be numeric or logical.
 
 
 
-The following code chunk will use 'as.numeric' to convert factor, logical, and character variables to numeric.
+The following code chunk will use `as.numeric()` to try to convert factor, logical, and character variables to numeric.
 
 ```{r numeric conversion, results="hide"}
 fac_to_num = as.numeric(pull(prob1_df, vec_factor))
@@ -54,12 +54,16 @@ char_to_num = as.numeric(pull(prob1_df, vec_character))
 log_to_num = as.numeric(pull(prob1_df, vec_logical))
 ```
 
-Factor variables will convert to numeric variables based on the integer values that R assigns to them. Every time a factor vector appears, R will assign the same number to it. Since I created the factor vector with letters, the integers are assigned starting with 1 and in alphabetical order. 
+Factor variables will convert to numeric variables based on the integer values that R assigns to them. Every time a factor vector appears, R will assign the same number to it. Since I created the factor vector with letters, the integers are assigned starting with 1, in alphabetical order. 
 
-The logical variable values will be assigned as True = 1 and False = 0.
+The logical variable values will be assigned as `True` = 1 and `False` = 0.
 
-R tries to coerce variables of a different type (i.e. not numeric or logical) to NAs. Since the character vector is not based on numbers/integers, we are unable to convert to numeric. Because of that, I will try to convert the character variable into a factor variable, and then into a numeric variable:
+R tries to coerce variables of a different type (i.e. not numeric or logical) to NAs. Since the character vector is not based on numbers/integers, we are unable to convert them to numeric. Because of that, I will try to convert the character variable into a factor variable, and then into a numeric variable:
 
+```{r convert character to numeric, results="hide"}
+char_to_num2 = as.numeric(as.factor(pull(prob1_df, vec_character)))
+```
+Now, the warning message is not received and this produces a string of numbers. Conversion of a character variable to factor and then to numeric was successful.
 
 
 In the next code chunk, I will:
@@ -70,9 +74,12 @@ In the next code chunk, I will:
 
 ```{r conversions, results="hide"}
 as.numeric(pull(prob1_df, vec_logical)) * pull(prob1_df, random_sample)
-as.factor(pull(prob1_df, vec_logical)) * pull(prob1_df, random_sample) #The console says "not meaningful for factors" and displays a string of NAs because the factor variable I created contained letters.
+as.factor(pull(prob1_df, vec_logical)) * pull(prob1_df, random_sample)
 as.numeric(as.factor(pull(prob1_df, vec_logical))) * pull(prob1_df, random_sample)
 ```
+
+The first and third operations are successful (logical ot numeric, and logical to factor and tthen numeric. However, when converting the logical vector to a factor variable and then multiplying random sample (numeric) by the result, the console displays a message saying "not meaningful for factors" and displays a string of NAs. Only after converting the factor variable to numeric will R multiply this with a numeric variable.
+
 
 
 **Problem 2**
@@ -86,10 +93,10 @@ I created a data frame comprised of:
 * A factor vector created by coercing the above logical vector
 
 ```{r setting seed}
-set.seed(1234)
+set.seed(123)
 ```
 
-```{r create dataframe 2, results ="hide"}
+```{r create dataframe 2, results="hide"}
 prob2_df = tibble(
   x = rnorm(500),
   y = rnorm(500),
@@ -103,3 +110,21 @@ prob2_df = tibble(
 The dataset includes `r nrow(prob2_df)` rows and `r ncol(prob2_df)` columns, indicating that there are 5 vectors with 500 values. The mean of x is `r mean(pull(prob2_df, x))`. The median of x is `r median(pull(prob2_df, x))`. The standard deviation of x is `r sd(pull(prob2_df, x))`. The proportion of cases for which (x + y) > 1 is the same as the proportion of cases for which the logical vector is 'True', which is `r length(which(pull(prob2_df, vec_log)))/length(pull(prob2_df, vec_log))`.
 
 
+
+Now, I will make a scatterplot of `y` vs `x` using the logical variable `vec_log`, equaling `(x + y) > 1`, as well as the numeric and factor variables created from `vec_log`.
+
+The logical vector `vec_log` and the factor vector `vec_fac` are based on binary values. For the logical vector, values are `True` and `False`, and for the factor vector, values are `0` and `1`. For the numeric vector even though the data values only include `0` and `1`, R will still assume it is continuous. The legends for each plot are created accordingly - for `vec_log` and `vec_fac`, the legends show `FALSE` and `TRUE`, but for `vec_num`, there is a gradient from `0` to `1`, though the plot itself shows only two colors.
+
+```{r create scatterplots}
+plot_log <- ggplot(prob2_df, aes(x = x, y = y, color = vec_log)) + geom_point(size = 0.5)
+plot_num <- ggplot(prob2_df, aes(x = x, y = y, color = vec_num)) + geom_point(size = 0.5)
+plot_fac <- ggplot(prob2_df, aes(x = x, y = y, color = vec_fac)) + geom_point(size = 0.5)
+
+plot_log
+plot_num
+plot_fac
+```
+
+```{r export first scatterplot}
+ggsave("plot_log.pdf", height = 4, width = 6)
+```
