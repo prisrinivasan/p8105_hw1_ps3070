@@ -2,14 +2,12 @@
 name: "Priyanka Srinivasan"
 title: "p8105_hw1_ps3070"
 output: github_document
-editor_options: 
-  chunk_output_type: console
 ---
 
 **Problem 1**
 
 First, I will load the tidyverse library.
-```{r adding tidyverse library}
+```{r adding tidyverse library, results = "hide"}
 library(tidyverse)
 ```
 
@@ -58,7 +56,7 @@ Factor variables will convert to numeric variables based on the integer values t
 
 The logical variable values will be assigned as `True` = 1 and `False` = 0.
 
-R tries to coerce variables of a different type (i.e. not numeric or logical) to NAs. Since the character vector is not based on numbers/integers, we are unable to convert them to numeric. Because of that, I will try to convert the character variable into a factor variable, and then into a numeric variable:
+R tries to coerce variables of a different type (i.e. not numeric or logical) which resultst in NAs. Since the character vector is not based on numbers/integers, we are unable to convert them to numeric. Because of that, I will try to convert the character variable into a factor variable, and then into a numeric variable:
 
 ```{r convert character to numeric, results="hide"}
 char_to_num2 = as.numeric(as.factor(pull(prob1_df, vec_character)))
@@ -113,7 +111,7 @@ The dataset includes `r nrow(prob2_df)` rows and `r ncol(prob2_df)` columns, ind
 
 Now, I will make a scatterplot of `y` vs `x` using the logical variable `vec_log`, equaling `(x + y) > 1`, as well as the numeric and factor variables created from `vec_log`.
 
-The logical vector `vec_log` and the factor vector `vec_fac` are based on binary values. For the logical vector, values are `True` and `False`, and for the factor vector, values are `0` and `1`. For the numeric vector even though the data values only include `0` and `1`, R will still assume it is continuous. The legends for each plot are created accordingly - for `vec_log` and `vec_fac`, the legends show `FALSE` and `TRUE`, but for `vec_num`, there is a gradient from `0` to `1`, though the plot itself shows only two colors.
+The logical vector `vec_log` and the factor vector `vec_fac` are based on binary values. For the logical vector, values are `True` and `False`, and for the factor vector, values are `0` and `1`. For the numeric vector even though the data values only include `0` and `1`, R will still assume it is continuous. The legends for each plot are created accordingly - for `vec_log` and `vec_fac`, the legends show `FALSE` and `TRUE`, but for `vec_num`, there is a gradient from `0` to `1`, though the plot itself shows only two colors. Using `geom_point`, I decreased the size of the points tot `0.5` so that less points overlapped.
 
 ```{r create scatterplots}
 plot_log <- ggplot(prob2_df, aes(x = x, y = y, color = vec_log)) + geom_point(size = 0.5)
